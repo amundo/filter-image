@@ -5,6 +5,11 @@ filter-image {
 
 }
 
+filter-image figcaption {
+  display: flex;
+  justify-content: space-between;
+  padding:1em 0;
+}
 
 filter-image label {
   display: grid;
@@ -22,6 +27,7 @@ filter-image form {
   gap: 1em;
   border:1px solid;
 }
+
 
 
 filter-image label {
