@@ -18,14 +18,14 @@ filter: sepia(60%);
     <figure>
       <img src>
       <figcaption>
-        <input type=file accept="image/*">
+        <input class=upload-image type=file accept="image/*">
       </figcaption>
     </figure>
     <form>
-      <label>contrast: <input type="range" name="contrast" min="0" max="200" data-unit="%">%</label>
-      <label>grayscale: <input type="range" name="grayscale" min="0" max="200" data-unit="%">%</label>
-      <label>brightness: <input type="range" name="brightness" value=100 min="0" max="200" data-unit="%"></label>
-      <label>invert: <input type="range" name="invert" value=0 step=100 min="0" max="100" data-unit="%">%</label>
+      <label class=filter-function>contrast: <input type="range" name="contrast" min="0" max="200" data-unit="%">%</label>
+      <label class=filter-function>grayscale: <input type="range" name="grayscale" min="0" max="200" data-unit="%">%</label>
+      <label class=filter-function>brightness: <input type="range" name="brightness" value=100 min="0" max="200" data-unit="%"></label>
+      <label class=filter-function>invert: <input type="range" name="invert" value=0 step=100 min="0" max="100" data-unit="%">%</label>
       </form>
       `
     this.dropzone = this
@@ -85,9 +85,16 @@ filter: sepia(60%);
 
   listen(){
     this.addEventListener('change', changeEvent => {
-      console.log(this.data)
-      this.querySelector("img").style.filter = this.data
+      if(changeEvent.target.matches('.filter-function')){
+        this.querySelector("img").style.filter = this.data
+      }
     })
+
+    this.querySelector('.upload-image').addEventListener('change', changeEvent => {
+      this.querySelector("img").src = URL.createObjectURL(changeEvent.target.files[0])
+    })
+
+
 
 
     this.dropzone.addEventListener("dragover", (e) => {
