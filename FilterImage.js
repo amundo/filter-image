@@ -1,0 +1,118 @@
+class FilterImage extends HTMLElement {
+  constructor(){
+    super()
+   /*
+ this.filters = `
+filter: blur(5px);
+filter: brightness(0.4);
+filter: contrast(200%);
+filter: grayscale(50%);
+filter: hue-rotate(90deg);
+filter: invert(75%);
+filter: opacity(25%);
+filter: saturate(30%);
+filter: sepia(60%);
+    `
+   */
+    this.innerHTML = `
+    <figure>
+      <img src>
+      <figcaption>
+        <input type=file accept="image/*">
+      </figcaption>
+    </figure>
+    <form>
+      <label>contrast: <input type="range" name="contrast" min="0" max="200" data-unit="%">%</label>
+      <label>grayscale: <input type="range" name="grayscale" min="0" max="200" data-unit="%">%</label>
+      <label>brightness: <input type="range" name="brightness" value=100 min="0" max="200" data-unit="%"></label>
+      <label>invert: <input type="range" name="invert" value=0 step=100 min="0" max="100" data-unit="%">%</label>
+      </form>
+      `
+    this.dropzone = this
+    this.listen()
+  }
+
+  /*
+      <label>saturate: <input type="range" name="saturate" min="0" max="100" data-unit="%">%</label>
+      <label>hue-rotate: <input type="range" name="hue-rotate" min="0" max="360" data-unit="%">deg</label>
+      <label>blur: <input type="range" name="blur" value=0 min="0" max="10" data-unit="%">px</label>
+      <label>opacity: <input type="range" name="opacity" min="0" max="100" data-unit="%">%</label>
+      <label>sepia: <input type="range" name="sepia" min="0" max="100" data-unit="%">%</label>
+
+  */
+
+  async fetch(url){
+    let response = await fetch(url)
+    let data = await response.json()
+    this.data = data
+  }
+
+  connectedCallback(){
+
+  }
+
+  static get observedAttributes(){
+    return ["src"]
+  }
+
+  attributeChangedCallback(attribute, oldValue, newValue){
+    if(attribute == "src"){
+      this.querySelector('img').src = newValue
+    }
+  }
+
+  set data(data){
+    this.whatever = data.whatever
+    this.metadata = data.metadata
+    this.render()
+  }
+
+  get data(){
+    return Array.from(this.querySelectorAll('[name]'))
+      .map(input => [input.name, input.value, input.dataset.unit])
+      .filter(([name, value, unit]) => value > 0)
+      .map(([name,value,unit]) => 
+        `${name}(${value}${unit})`
+      )
+      .join(' ')
+    
+  }
+ 
+
+  render(){
+
+  }
+
+  listen(){
+    this.addEventListener('change', changeEvent => {
+      console.log(this.data)
+      this.querySelector("img").style.filter = this.data
+    })
+
+
+    this.dropzone.addEventListener("dragover", (e) => {
+      console.log(e)
+      e.preventDefault()
+      this.dropzone.classList.add("dragover")
+    })
+
+    this.dropzone.addEventListener("dragleave", () => {
+      this.dropzone.classList.remove("dragover")
+    })
+
+    this.dropzone.addEventListener("drop", async (e) => {
+      e.preventDefault()
+      this.dropzone.classList.remove("dragover")
+
+      const file = e.dataTransfer.files[0]
+
+      this.querySelector('input[type=file]').files = e.dataTransfer.files
+      this.querySelector('img').src = URL.createObjectURL(file)
+
+      this.render()
+    })
+  }
+}
+
+export {FilterImage}
+customElements.define('filter-image', FilterImage)

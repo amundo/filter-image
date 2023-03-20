@@ -1,0 +1,29 @@
+
+filter-image {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+
+}
+
+
+filter-image label {
+  display: grid;
+}
+
+filter-image img {
+  width: 100%;
+  height: auto;
+  object-fit:contain;
+
+}
+
+filter-image form {
+  grid-template-columns: 1fr ;
+  gap: 1em;
+  border:1px solid;
+}
+
+
+filter-image label {
+  grid-template-columns: 20ch 1fr;
+}
