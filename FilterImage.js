@@ -85,7 +85,7 @@ filter: sepia(60%);
 
   listen(){
     this.addEventListener('change', changeEvent => {
-      if(changeEvent.target.matches('.filter-function')){
+      if(changeEvent.target.matches('.filter-function input')){
         this.querySelector("img").style.filter = this.data
       }
     })
@@ -93,9 +93,6 @@ filter: sepia(60%);
     this.querySelector('.upload-image').addEventListener('change', changeEvent => {
       this.querySelector("img").src = URL.createObjectURL(changeEvent.target.files[0])
     })
-
-
-
 
     this.dropzone.addEventListener("dragover", (e) => {
       console.log(e)
